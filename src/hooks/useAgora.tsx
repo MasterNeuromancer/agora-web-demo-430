@@ -60,19 +60,24 @@ export default function useAgora(client: IAgoraRTCClient | undefined)
     setRemoteUsers(client.remoteUsers);
 
     const handleUserPublished = async (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') => {
+      console.log('mediaType', mediaType);
       await client.subscribe(user, mediaType);
       // toggle rerender while state of remoteUsers changed.
-      setRemoteUsers(remoteUsers => Array.from(client.remoteUsers));
-    }
+      setRemoteUsers(Array.from(client.remoteUsers));
+    };
+
     const handleUserUnpublished = (user: IAgoraRTCRemoteUser) => {
-      setRemoteUsers(remoteUsers => Array.from(client.remoteUsers));
-    }
-    const handleUserJoined = (user: IAgoraRTCRemoteUser) => {
-      setRemoteUsers(remoteUsers => Array.from(client.remoteUsers));
-    }
+      setRemoteUsers(Array.from(client.remoteUsers));
+    };
+
+    const handleUserJoined = async (user: IAgoraRTCRemoteUser) => {
+      setRemoteUsers(Array.from(client.remoteUsers));
+    };
+
     const handleUserLeft = (user: IAgoraRTCRemoteUser) => {
-      setRemoteUsers(remoteUsers => Array.from(client.remoteUsers));
-    }
+      setRemoteUsers(Array.from(client.remoteUsers));
+    };
+
     client.on('user-published', handleUserPublished);
     client.on('user-unpublished', handleUserUnpublished);
     client.on('user-joined', handleUserJoined);
@@ -85,6 +90,19 @@ export default function useAgora(client: IAgoraRTCClient | undefined)
       client.off('user-left', handleUserLeft);
     };
   }, [client]);
+
+  useEffect(() => {
+    if(remoteUsers){
+      remoteUsers.map(async (remoteUser) => {
+
+        console.log('remoteUser on if statement', remoteUser);
+
+        await client.subscribe(remoteUser, 'audio');
+        remoteUser.audioTrack.play();
+
+      });
+    }
+  }, [client, remoteUsers]);
 
   return {
     localAudioTrack,

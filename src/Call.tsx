@@ -11,7 +11,7 @@ const Call = () => {
   const [ token, setToken ] = useState('');
   const [ channel, setChannel ] = useState('');
   const {
-    localVideoTrack, leave, join, joinState, remoteUsers
+   localAudioTrack, localVideoTrack, leave, join, joinState, remoteUsers
   } = useAgora(client);
 
   return (
@@ -37,8 +37,9 @@ const Call = () => {
       <div className='player-container'>
         <div className='local-player-wrapper'>
           <p className='local-player-text'>{localVideoTrack && `localTrack`}{joinState && localVideoTrack ? `(${client.uid})` : ''}</p>
-          <MediaPlayer videoTrack={localVideoTrack} audioTrack={undefined}></MediaPlayer>
+          <MediaPlayer videoTrack={localVideoTrack} audioTrack={localAudioTrack}></MediaPlayer>
         </div>
+        {console.log('remoteUsers', remoteUsers)}
         {remoteUsers.map(user => (<div className='remote-player-wrapper' key={user.uid}>
             <p className='remote-player-text'>{`remoteVideo(${user.uid})`}</p>
             <MediaPlayer videoTrack={user.videoTrack} audioTrack={user.audioTrack}></MediaPlayer>

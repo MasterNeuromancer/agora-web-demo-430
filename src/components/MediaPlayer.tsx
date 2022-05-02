@@ -15,14 +15,14 @@ const MediaPlayer = (props: VideoPlayerProps) => {
       props.videoTrack?.stop();
     };
   }, [container, props.videoTrack]);
-  useEffect(() => {
-    if(props.audioTrack){
-      props.audioTrack?.play();
-    }
-    return () => {
-      props.audioTrack?.stop();
-    };
-  }, [props.audioTrack]);
+  // useEffect(() => {
+  //   if(props.audioTrack){
+  //     props.audioTrack?.play();
+  //   }
+  //   return () => {
+  //     props.audioTrack?.stop();
+  //   };
+  // }, [props.audioTrack]);
   return (
     <div ref={container}  className="video-player" style={{ width: "320px", height: "240px"}}></div>
   );
